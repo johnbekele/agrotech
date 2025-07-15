@@ -84,9 +84,9 @@ const logoutUser = asyncHandler(async (req, res) => {
 const createUser = asyncHandler(async (req, res) => {
     let userDetails = req.body;
 
-    // Check for correct field names (firstname, lastname instead of name)
-    if(!userDetails.firstname || !userDetails.lastname || !userDetails.email || !userDetails.password || !userDetails.role){
-        return res.status(400).json({message: 'Please fill all fields'});
+    // Check for required fields
+    if(!userDetails.name || !userDetails.email || !userDetails.password || !userDetails.age){
+        return res.status(400).json({message: 'Please fill all required fields (name, email, password, age)'});
     }
 
     // Validate email format
@@ -95,6 +95,13 @@ const createUser = asyncHandler(async (req, res) => {
         return res.status(400).json({message: 'Please enter a valid email address'});
     }
 
+    // Validate age
+    const age = parseInt(userDetails.age);
+    if(isNaN(age) || age <= 0 || age > 120) {
+        return res.status(400).json({message: 'Please enter a valid age (1-120)'});
+    }
+
+    // Check if user already exists
     const userAvailable = await User.findOne({ email: userDetails.email });
     if(userAvailable){
         return res.status(400).json({message: 'User already exists with this email'});
@@ -111,57 +118,84 @@ const createUser = asyncHandler(async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(userDetails.password, salt);
 
-    // Create user object with verification fields
+    // Create user object matching your schema
     const userData = {
-        firstname: userDetails.firstname,
-        lastname: userDetails.lastname,
-        email: userDetails.email,
+        name: userDetails.name.trim(),
+        email: userDetails.email.trim().toLowerCase(),
         password: hashedPassword,
-        role: userDetails.role,
+        age: age,
+        address: userDetails.address ? userDetails.address.trim() : undefined,
+        city: userDetails.city ? userDetails.city.trim() : undefined,
+        state: userDetails.state ? userDetails.state.trim() : undefined,
+        zipCode: userDetails.zipCode ? parseInt(userDetails.zipCode) : undefined, // Convert to Number as per schema
+        role: userDetails.role || 'farmer', // Default role as per your schema
         emailVerificationToken: emailVerificationToken,
         emailVerificationTokenExpires: emailVerificationTokenExpires,
-        isVerified: false // Make sure this is set to false
+        isVerified: false
     };
 
     console.log('User data before creation:', userData); // Debug log
 
-    const user = await User.create(userData);
+    try {
+        const user = await User.create(userData);
+        console.log('User created:', user); // Debug log
 
-    console.log('User created:', user); // Debug log
-
-    if(user){
-        // Send verification email
-        try {
-            const fullName = `${user.firstname} ${user.lastname}`;
-            await mailer.sendVerificationEmail(user.email, emailVerificationToken, fullName);
-            
-            res.status(201).json({ 
-                message: 'User registered successfully! Please check your email to verify your account.',
-                user: {
-                    id: user._id,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    email: user.email,
-                    role: user.role,
-                    isVerified: user.isVerified
-                }
-            });
-        } catch (emailError) {
-            console.error('Email sending failed:', emailError);
-            res.status(201).json({ 
-                message: 'User registered successfully, but verification email could not be sent. Please contact support.',
-                user: {
-                    id: user._id,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    email: user.email,
-                    role: user.role,
-                    isVerified: user.isVerified
-                }
-            });
+        if(user){
+            // Send verification email
+            try {
+                const fullName = user.name;
+                await mailer.sendVerificationEmail(user.email, emailVerificationToken, fullName);
+                
+                res.status(201).json({ 
+                    message: 'User registered successfully! Please check your email to verify your account.',
+                    user: {
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        age: user.age,
+                        address: user.address,
+                        city: user.city,
+                        state: user.state,
+                        zipCode: user.zipCode,
+                        role: user.role,
+                        isVerified: user.isVerified,
+                        registrationDate: user.registrationDate
+                    }
+                });
+            } catch (emailError) {
+                console.error('Email sending failed:', emailError);
+                res.status(201).json({ 
+                    message: 'User registered successfully, but verification email could not be sent. Please contact support.',
+                    user: {
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        age: user.age,
+                        address: user.address,
+                        city: user.city,
+                        state: user.state,
+                        zipCode: user.zipCode,
+                        role: user.role,
+                        isVerified: user.isVerified,
+                        registrationDate: user.registrationDate
+                    }
+                });
+            }
+        } else {
+            res.status(400).json({ message: 'Invalid user data'});
         }
-    } else {
-        res.status(400).json({ message: 'Invalid user data'});
+    } catch (dbError) {
+        console.error('Database error:', dbError);
+        
+        // Handle specific MongoDB errors
+        if (dbError.code === 11000) {
+            res.status(400).json({ message: 'Email already exists' });
+        } else if (dbError.name === 'ValidationError') {
+            const errors = Object.values(dbError.errors).map(err => err.message);
+            res.status(400).json({ message: `Validation Error: ${errors.join(', ')}` });
+        } else {
+            res.status(500).json({ message: 'Server error during user creation' });
+        }
     }
 });
 
@@ -182,7 +216,8 @@ const verifyEmail = asyncHandler(async (req, res) => {
         console.log('Looking for user with token:', token);
         
         const user = await User.findOne({
-            emailVerificationToken: token,
+            emailVerificationToken
+: token,
             emailVerificationTokenExpires: { $gt: Date.now() }
         });
 
