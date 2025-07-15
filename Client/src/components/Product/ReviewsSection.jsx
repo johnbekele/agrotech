@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
+import Navbar from '../Navbar';
 
 const ReviewsSection = ({ machineId }) => {
   const [reviews, setReviews] = useState([]);
@@ -48,7 +49,10 @@ const ReviewsSection = ({ machineId }) => {
   };
 
   return (
-    <div className='p-10'>
+    <>
+  
+    <div className='p-10 '>
+    
       <h2 className="text-3xl font-bold mb-4">Reviews</h2>
       {/* Display previous reviews */}
       <div className="mb-4">
@@ -118,6 +122,7 @@ const ReviewsSection = ({ machineId }) => {
       <Button type="submit" variant="contained" color="primary">Submit Review</Button>
     </form>
     </div>
+    </>
   );
 };
 

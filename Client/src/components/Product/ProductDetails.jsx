@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Navbar from "../Navbar";
 
 const ProductDetails = ({ machineId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -56,7 +57,8 @@ const ProductDetails = ({ machineId }) => {
     .filter((image) => image !== selectedImage);
 
   return (
-    <div className="container mx-auto p-8 bg-gray-300 m-5 rounded-xl shadow-lg shadow-zinc-500">
+    <><Navbar/>
+    <div className="container mx-auto p-8 bg-gray-300 m-5 rounded-xl shadow-lg shadow-zinc-500 mt-25">
       <h2 className="text-5xl text-green-900 text-center font-bold mb-4">
         {name}
       </h2>
@@ -139,11 +141,13 @@ const ProductDetails = ({ machineId }) => {
       </div>
 
       <div className="flex justify-end">
+        
         <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Book Now
         </button>
       </div>
     </div>
+    </>
   );
 };
 

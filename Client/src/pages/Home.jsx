@@ -175,20 +175,20 @@ function Home() {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             {[
               {
-                name: 'Rajesh Kumar',
-                location: 'Punjab',
+                name: 'jon doe',
+                location: 'gdansk',
                 testimonial: 'AgroTech has transformed my farming operations. Easy booking and quality equipment!',
                 rating: 5
               },
               {
-                name: 'Priya Sharma',
-                location: 'Maharashtra',
+                name: 'lidia carole ',
+                location: 'sopot ',
                 testimonial: 'Affordable rates and excellent service. Highly recommend to fellow farmers.',
                 rating: 5
               },
               {
-                name: 'Mohammed Ali',
-                location: 'Karnataka',
+                name: 'johanan alek',
+                location: 'gdynia',
                 testimonial: 'The variety of equipment available is impressive. Great platform for modern farming.',
                 rating: 5
               }

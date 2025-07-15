@@ -84,7 +84,7 @@ const Contact = () => {
                 
                 <div className="space-y-6">
                   <div className="text-2xl font-bold text-[#b2d8b4]">
-                    🇮🇳 India
+                   Poland
                   </div>
                   <hr className="border-white/30 my-6" />
                   
@@ -93,7 +93,7 @@ const Contact = () => {
                       <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <span className="text-lg">📍</span>
                       </div>
-                      <p className="text-lg">Pune, Maharashtra 444905</p>
+                      <p className="text-lg"> Ulica Bysewska 30, 80-298 Gdańsk </p>
                     </div>
                     
                     <div className="flex items-center space-x-4 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all duration-300">
@@ -101,7 +101,7 @@ const Contact = () => {
                         <span className="text-lg">✉️</span>
                       </div>
                       <a href="mailto:agrotech01@gmail.com" className="text-lg hover:text-[#b2d8b4] transition-colors">
-                        agrotech01@gmail.com
+                        agrotech01@mock.pl
                       </a>
                     </div>
                     
@@ -109,7 +109,7 @@ const Contact = () => {
                       <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <span className="text-lg">📱</span>
                       </div>
-                      <p className="text-lg">+91 9945670186</p>
+                      <p className="text-lg">+48 7892349072</p>
                     </div>
                   </div>
                 </div>

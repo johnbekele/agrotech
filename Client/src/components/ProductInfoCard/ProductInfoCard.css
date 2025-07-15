@@ -1,11 +1,79 @@
-/* Custom styles for the slider arrows */
-.slick-prev,
-.slick-next {
-  color: green; /* Change to the desired color */
+/* ProductInfoCard.css */
+.slick-slider {
+  position: relative;
 }
 
-/* Custom styles for the arrow icons (if needed) */
+.slick-dots {
+  bottom: -50px !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.slick-dots li {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+.slick-dots li button {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: #d1d5db !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.slick-dots li.slick-active button {
+  background: #2a7f62 !important;
+  transform: scale(1.2) !important;
+}
+
+.slick-prev,
+.slick-next {
+  z-index: 10 !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: rgba(42, 127, 98, 0.8) !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background: rgba(42, 127, 98, 1) !important;
+  transform: scale(1.1) !important;
+}
+
+.slick-prev {
+  left: 20px !important;
+}
+
+.slick-next {
+  right: 20px !important;
+}
+
 .slick-prev:before,
 .slick-next:before {
-  color:green; /* Change to the desired color */
+  color: white !important;
+  font-size: 18px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .slick-prev,
+  .slick-next {
+    width: 35px !important;
+    height: 35px !important;
+  }
+  
+  .slick-prev {
+    left: 10px !important;
+  }
+  
+  .slick-next {
+    right: 10px !important;
+  }
 }

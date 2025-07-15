@@ -12,7 +12,7 @@ import ProductRegistrationPage from './pages/ProductRegistrationPage';
 import Image from './pages/Image';
 import ProductInfoCard from './components/ProductInfoCard/ProductInfoCard';
 import EmailVerification  from './pages/EmailVerification';
-
+import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
         <Route path='/products' element={<Products />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/about' element={<About/>} />

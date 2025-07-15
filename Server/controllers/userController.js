@@ -30,7 +30,7 @@ const getUser = asyncHandler(async (req, res) => {
 //@access Public
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    
+    console.log(req.body);
     if(!email || !password){
         return res.status(400).json({message: 'Please fill all fields'});
     }
@@ -314,6 +314,22 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(200).json({message: 'User deleted successfully', user});
 });
 
+const forgotPassword=asyncHandler(async (req, res) => {
+    const {email}=req.body;
+    if(!email) {
+        return res.status(404).json({message: 'email not found'});
+    }
+    
+    const user =await User.findOne({email:email});
+
+    if(!user){
+         return res.status(404).json({message: 'User not found'});
+    }
+await mailer.sendResetPasswordEmail(user.email, emailVerificationToken, fullName);
+
+    res.status(200).json({message: 'User deleted successfully', user});
+});
+
 module.exports = { 
     getUsers, 
     loginUser, 
@@ -323,5 +339,6 @@ module.exports = {
     updateUser, 
     deleteUser,
     verifyEmail,
+    forgotPassword,
     resendVerificationEmail
 };
