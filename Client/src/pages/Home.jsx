@@ -1,7 +1,7 @@
 import React from 'react'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
-
+import agrotechvid from  "../assets/agrotech.mp4"
 function Home() {
   return (
     <div className='w-full min-h-screen bg-gradient-to-br from-[#f7f7f8] to-[#e8f5e8]' style={{ fontFamily: "'Exo 2', sans-serif" }}>
@@ -40,30 +40,39 @@ function Home() {
 
       {/* Enhanced Video Section */}
       <div className='relative' style={{ marginTop: '80px' }}>
-        <video 
-          src="../src/assets/agrotech.mp4" 
-          autoPlay 
-          loop 
-          muted 
-          className='w-full h-[85vh] object-cover'
-        />
-        <div className='absolute inset-0 bg-black/30 flex items-center justify-center'>
-          <div className='text-center text-white'>
-            <h1 className='text-6xl font-bold mb-4 animate-fade-in-up'>
-              Welcome to AgroTech
-            </h1>
-            <p className='text-xl mb-8 animate-fade-in-up animation-delay-300'>
-              Revolutionizing Agriculture Through Smart Equipment Rental
-            </p>
-            <Link to="/register">
-              <button className='bg-gradient-to-r from-[#2a7f62] to-[#41676a] hover:from-[#2f6b57] hover:to-[#4a737a] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in-up animation-delay-500'>
-                Start Your Journey
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
+  <video 
+    src={agrotechvid}
+    autoPlay 
+    loop 
+    muted 
+    className='w-full h-[85vh] object-cover'
+  />
+  <div className='absolute inset-0 bg-black/30 flex items-center justify-center'>
+    <div className='text-center text-white'>
+      <h1 className='text-6xl font-bold mb-4 animate-fade-in-up'>
+        Welcome to AgroTech
+      </h1>
+      <p className='text-xl mb-8 animate-fade-in-up animation-delay-300'>
+        Revolutionizing Agriculture Through Smart Equipment Rental
+      </p>
+      <Link to="/register">
+        <button className='bg-gradient-to-r from-[#2a7f62] to-[#41676a] hover:from-[#2f6b57] hover:to-[#4a737a] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in-up animation-delay-500'>
+          Start Your Journey
+        </button>
+      </Link>
+    </div>
+  </div>
+  
+  {/* Developer Credit */}
+  <div className='absolute bottom-4 right-4 text-white/80 animate-fade-in-up animation-delay-700'>
+    <p className='text-sm font-light tracking-wide'>
+      Developed by{' '}
+      <span className='font-semibold text-[#2a7f62] bg-white/20 px-2 py-1 rounded backdrop-blur-sm'>
+        YOHANS BEKELE
+      </span>
+    </p>
+  </div>
+</div>
       {/* Enhanced Hero Section */}
       <div className='w-full min-h-screen bg-gradient-to-br from-[#f7f7f8] to-[#e8f5e8] flex items-center py-20'>
         <div className='container mx-auto px-8 flex items-center'>
