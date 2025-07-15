@@ -1,53 +1,25 @@
-/**
-* @swagger
-* /api/user:
-*   post:
-*     summary: Create a new user
-*     tags: [User]
-*     requestBody:
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             properties:
-*               name:
-*                 type: string
-*               mobile:
-*                 type: integer
-*               password:
-*                 type: string
-*               age:
-*                 type: integer
-*               role:
-*                 type: string
-*               address:
-*                 type: string
-*               city:
-*                 type: string
-*               state:
-*                 type: string
-*               zipCode:
-*                 type: integer
-*     responses:
-*       200:
-*         description: Successfully created a new user
-*         content:
-*           application/json:
-*             schema:
-*               $ref: '#/definitions/UserResponse'
-* 
-*/
-
 const express = require('express');
 const router = express.Router();
-const {getUsers, getUser, loginUser, logoutUser, createUser, updateUser, deleteUser} = require('../controllers/userController');
+const {
+    getUsers, 
+    getUser, 
+    loginUser, 
+    logoutUser, 
+    createUser, 
+    updateUser, 
+    deleteUser,
+    verifyEmail,
+    resendVerificationEmail
+} = require('../controllers/userController');
 const validateToken = require('../middleware/validateTokenHandler');
 
-
+// Public routes (no authentication required)
 router.post('/login', loginUser);
 router.post('/', createUser);
+router.get('/verify-email', verifyEmail);
+router.post('/resend-verification', resendVerificationEmail);
 
+// Protected routes (authentication required)
 router.use(validateToken);
 
 router.post('/logout', logoutUser);
@@ -57,4 +29,3 @@ router.put('/', updateUser);
 router.delete('/', deleteUser);
 
 module.exports = router;
-

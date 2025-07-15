@@ -11,6 +11,7 @@ import ProductDetailPage from './components/Product/ProductDetailPage';
 import ProductRegistrationPage from './pages/ProductRegistrationPage';
 import Image from './pages/Image';
 import ProductInfoCard from './components/ProductInfoCard/ProductInfoCard';
+import EmailVerification  from './pages/EmailVerification';
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/products' element={<Products />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/about' element={<About/>} />
         <Route path="/products/:machineId" element={<ProductDetailPage/>} />

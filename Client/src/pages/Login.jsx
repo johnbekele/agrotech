@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Toaster, toast } from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 
 function Login() {
@@ -9,8 +10,10 @@ function Login() {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showResendButton, setShowResendButton] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const [formData, setFormData] = useState({
-    mobile: '',
+    email: '',
     password: ''
   });
 
@@ -20,21 +23,51 @@ function Login() {
       [e.target.name]: e.target.value
     });
     setError(''); // Clear error when user starts typing
+    setShowResendButton(false); // Hide resend button when user starts typing
+  };
+
+  const handleResendVerification = async () => {
+    if (!formData.email) {
+      toast.error('Please enter your email address');
+      return;
+    }
+
+    setResendLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/api/user/resend-verification`, {
+        email: formData.email
+      });
+      toast.success('Verification email sent! Please check your inbox.');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send verification email');
+    } finally {
+      setResendLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    
     try {
       const response = await axios.post(`${BASE_URL}/api/user/login`, formData);
       console.log(response.data);
       const { message, user, token } = response.data;
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
       console.log('message', message, 'user', user, 'token', token);
+      toast.success('Login successful!');
       navigate('/products');
     } catch (error) {
-      console.error('Login failed:', error.response.data);
-      setError('Invalid credentials. Please try again.');
+      console.error('Login failed:', error.response?.data);
+      const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+      setError(errorMessage);
+      
+      // Show resend button if email verification is required
+      if (errorMessage.includes('verify your email')) {
+        setShowResendButton(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -43,6 +76,7 @@ function Login() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-[#f7f7f8] to-[#e8f5e8]' style={{ fontFamily: "'Exo 2', sans-serif" }}>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       
       {/* Login Section */}
       <div className='flex items-center justify-center min-h-screen pt-20'>
@@ -69,7 +103,16 @@ function Login() {
                   {/* Error Message */}
                   {error && (
                     <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6'>
-                      {error}
+                      <p>{error}</p>
+                      {showResendButton && (
+                        <button
+                          onClick={handleResendVerification}
+                          disabled={resendLoading}
+                          className="mt-2 text-sm underline hover:no-underline disabled:opacity-50"
+                        >
+                          {resendLoading ? 'Sending...' : 'Resend verification email'}
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -77,15 +120,15 @@ function Login() {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                       <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Mobile Number
+                        Email Address
                       </label>
                       <input
-                        type="tel"
-                        name="mobile"
-                        value={formData.mobile}
+                        type="email"
+                        name="email"
+                        value={formData.email}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#2a7f62] focus:outline-none transition-colors bg-gray-50"
-                        placeholder="Enter your mobile number"
+                        placeholder="Enter your email address"
                         required
                       />
                     </div>
