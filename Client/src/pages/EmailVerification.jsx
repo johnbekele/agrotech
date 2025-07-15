@@ -23,24 +23,35 @@ function EmailVerification() {
       }
 
       try {
-        const response = await axios.get(`${BASE_URL}/api/user/verify-email?token=${token}`);
-        setStatus('success');
-        setMessage(response.data.message);
-        toast.success('Email verified successfully!');
+        setStatus('verifying');
+        setMessage('Verifying your email address...');
         
-        // Start countdown to redirect
-        const timer = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(timer);
-              navigate('/login');
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        // Send POST request to backend with token
+        const response = await axios.post(`${BASE_URL}/api/user/verify-email`, { token });
+        
+        if (response.data.success) {
+          setStatus('success');
+          setMessage(response.data.message);
+          toast.success('Email verified successfully!');
+          
+          // Start countdown to redirect
+          const timer = setInterval(() => {
+            setCountdown((prev) => {
+              if (prev <= 1) {
+                clearInterval(timer);
+                navigate('/login');
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
 
-        return () => clearInterval(timer);
+          return () => clearInterval(timer);
+        } else {
+          setStatus('error');
+          setMessage(response.data.message);
+          toast.error('Email verification failed!');
+        }
       } catch (error) {
         setStatus('error');
         setMessage(error.response?.data?.message || 'Email verification failed. Please try again.');

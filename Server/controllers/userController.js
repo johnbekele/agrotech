@@ -229,7 +229,7 @@ const createUser = asyncHandler(async (req, res) => {
 //@route GET /api/user/verify-email
 //@access Public
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { token } = req.query;
+    const { token } = req.body;
     
     console.log('Verification request received:', { token });
 
