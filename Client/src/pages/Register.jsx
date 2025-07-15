@@ -13,6 +13,7 @@ const RegistrationForm = () => {
     email: '',
     password: '',
     age: '',
+    mobile: '',
     address: '',
     city: '',
     state: '',
@@ -20,32 +21,6 @@ const RegistrationForm = () => {
   });
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  // Validation functions
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateStep1 = () => {
-    const trimmedName = formData.name.trim();
-    const trimmedEmail = formData.email.trim();
-    const trimmedPassword = formData.password.trim();
-    const age = parseInt(formData.age);
-
-    if (!trimmedName || !trimmedEmail || !trimmedPassword || !formData.age) {
-      return false;
-    }
-
-    if (!validateEmail(trimmedEmail)) {
-      return false;
-    }
-
-    if (isNaN(age) || age <= 0 || age > 120) {
-      return false;
-    }
-
-    return true;
-  };
 
   // Handle input changes
   const handleChange = (e) => {
@@ -56,11 +31,56 @@ const RegistrationForm = () => {
     }));
   };
 
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateMobile = (mobile) => {
+    const cleanMobile = mobile.replace(/\D/g, '');
+    return cleanMobile.length >= 10 && cleanMobile.length <= 15 && /^\d+$/.test(cleanMobile);
+  };
+
+  const validateStep1 = () => {
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedPassword = formData.password.trim();
+    const trimmedMobile = formData.mobile.trim();
+    const age = parseInt(formData.age);
+
+    if (!trimmedName || !trimmedEmail || !trimmedPassword || !formData.age || !trimmedMobile) {
+      toast.error('Please fill in all required fields');
+      return false;
+    }
+
+    if (!validateEmail(trimmedEmail)) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+
+    if (!validateMobile(trimmedMobile)) {
+      toast.error('Please enter a valid mobile number (10-15 digits)');
+      return false;
+    }
+
+    if (isNaN(age) || age <= 0 || age > 120) {
+      toast.error('Please enter a valid age (1-120)');
+      return false;
+    }
+
+    if (trimmedPassword.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return false;
+    }
+
+    return true;
+  };
+
   // Navigation functions
   const nextStep = () => {
     if (currentStep === 1) {
       if (!validateStep1()) {
-        toast.error('Please fill in all required fields correctly');
         return;
       }
     }
@@ -72,50 +92,56 @@ const RegistrationForm = () => {
   };
 
   // Form submission
-// In your frontend, update the handleSubmit function:
+// Form submission with detailed debugging
 const handleSubmit = async (e) => {
   e.preventDefault();
-
-  // Final validation
-  if (!validateStep1()) {
-    toast.error('Please fill in all required fields correctly');
-    setCurrentStep(1);
-    return;
-  }
-
   setLoading(true);
 
   try {
-    // Clean and prepare form data
     const cleanedFormData = {
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
       password: formData.password.trim(),
       age: parseInt(formData.age),
+      mobile: formData.mobile.trim(),
       address: formData.address.trim() || undefined,
       city: formData.city.trim() || undefined,
       state: formData.state.trim() || undefined,
-      zipCode: formData.zipCode.trim() ? parseInt(formData.zipCode.trim()) : undefined, // Convert to number
-      role: 'farmer' // Default role matching your schema
+      zipCode: formData.zipCode.trim() ? parseInt(formData.zipCode.trim()) : undefined,
+      role: 'farmer'
     };
 
-    console.log('Submitting form data:', cleanedFormData);
-    
-    const response = await axios.post(`${BASE_URL}/api/user/`, cleanedFormData);
-    
+    console.log('=== FORM SUBMISSION DEBUG ===');
+    console.log('Original form data:', formData);
+    console.log('Cleaned form data:', cleanedFormData);
+    console.log('API URL:', `${BASE_URL}/api/user/signup`);
+    console.log('Mobile length:', cleanedFormData.mobile.length);
+    console.log('Mobile validation:', validateMobile(cleanedFormData.mobile));
+    console.log('===============================');
+
+    const response = await axios.post(`${BASE_URL}/api/user/signup`, cleanedFormData);
+
     toast.success('Registration successful! Please check your email to verify your account.');
     setIsRegistered(true);
     setShowResendButton(true);
-    
+
   } catch (error) {
-    console.error('Registration failed:', error);
-    
+    console.error('=== ERROR DEBUG ===');
+    console.error('Full error:', error);
+    console.error('Error response:', error.response);
+    console.error('Error response data:', error.response?.data);
+    console.error('Error response status:', error.response?.status);
+    console.error('Error message:', error.response?.data?.message);
+    console.error('==================');
+
     if (error.response?.data?.message) {
       toast.error(error.response.data.message);
+    } else if (error.response?.data?.error) {
+      toast.error(error.response.data.error);
     } else if (error.response?.status === 400) {
       toast.error('Invalid form data. Please check your inputs.');
     } else if (error.response?.status === 409) {
-      toast.error('Email already exists. Please use a different email.');
+      toast.error('Email or mobile number already exists. Please use different credentials.');
     } else {
       toast.error('Registration failed. Please try again.');
     }
@@ -222,12 +248,27 @@ const handleSubmit = async (e) => {
 
                 <div>
                   <input
+                    type="tel"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#2a7f62] transition-colors bg-gray-50"
+                    placeholder="Enter mobile number (10-15 digits)"
+                    minLength="10"
+                    maxLength="15"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <input
                     type="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#2a7f62] transition-colors bg-gray-50"
-                    placeholder="Enter your password"
+                    placeholder="Enter your password (min 6 characters)"
+                    minLength="6"
                     required
                   />
                 </div>
@@ -240,6 +281,8 @@ const handleSubmit = async (e) => {
                     onChange={handleChange}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#2a7f62] transition-colors bg-gray-50"
                     placeholder="Enter your age"
+                    min="1"
+                    max="120"
                     required
                   />
                 </div>
@@ -259,7 +302,7 @@ const handleSubmit = async (e) => {
           {currentStep === 2 && (
             <div>
               <h2 className="text-3xl font-bold mb-2 text-center text-gray-800">Address Details</h2>
-              <p className="text-gray-600 text-center mb-8">Enter your address information</p>
+              <p className="text-gray-600 text-center mb-8">Enter your address information (optional)</p>
               
               <div className="space-y-6">
                 <div>
@@ -343,6 +386,10 @@ const handleSubmit = async (e) => {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Email:</span>
                       <span className="font-medium">{formData.email}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Mobile:</span>
+                      <span className="font-medium">{formData.mobile}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Age:</span>

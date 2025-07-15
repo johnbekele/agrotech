@@ -16,7 +16,7 @@ const validateToken = require('../middleware/validateTokenHandler');
 
 // Public routes (no authentication required) - MUST come BEFORE validateToken
 router.post('/login', loginUser);
-router.post('/', createUser);
+router.post('/signup', createUser);
 router.get('/verify-email', verifyEmail);
 router.post('/resend-verification', resendVerificationEmail);
 router.post('/forgot-password',forgotPassword )

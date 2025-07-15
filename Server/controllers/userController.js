@@ -85,8 +85,8 @@ const createUser = asyncHandler(async (req, res) => {
     let userDetails = req.body;
 
     // Check for required fields
-    if(!userDetails.name || !userDetails.email || !userDetails.password || !userDetails.age){
-        return res.status(400).json({message: 'Please fill all required fields (name, email, password, age)'});
+    if(!userDetails.name || !userDetails.email || !userDetails.password || !userDetails.age || !userDetails.mobile){
+        return res.status(400).json({message: 'Please fill all required fields (name, email, password, age, mobile)'});
     }
 
     // Validate email format
@@ -95,24 +95,41 @@ const createUser = asyncHandler(async (req, res) => {
         return res.status(400).json({message: 'Please enter a valid email address'});
     }
 
+    // Validate mobile format
+    const mobileRegex = /^[0-9]{10,15}$/;
+    if(!mobileRegex.test(userDetails.mobile)) {
+        return res.status(400).json({message: 'Please enter a valid mobile number (10-15 digits)'});
+    }
+
     // Validate age
     const age = parseInt(userDetails.age);
     if(isNaN(age) || age <= 0 || age > 120) {
         return res.status(400).json({message: 'Please enter a valid age (1-120)'});
     }
 
-    // Check if user already exists
-    const userAvailable = await User.findOne({ email: userDetails.email });
-    if(userAvailable){
-        return res.status(400).json({message: 'User already exists with this email'});
+    // Check if user already exists with email or mobile
+    const existingUser = await User.findOne({ 
+        $or: [
+            { email: userDetails.email },
+            { mobile: userDetails.mobile }
+        ]
+    });
+    
+    if(existingUser){
+        if(existingUser.email === userDetails.email) {
+            return res.status(400).json({message: 'User already exists with this email'});
+        }
+        if(existingUser.mobile === userDetails.mobile) {
+            return res.status(400).json({message: 'User already exists with this mobile number'});
+        }
     }
 
     // Generate email verification token
     const emailVerificationToken = crypto.randomBytes(32).toString('hex');
     const emailVerificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    console.log('Generated token:', emailVerificationToken); // Debug log
-    console.log('Token expires:', emailVerificationTokenExpires); // Debug log
+    console.log('Generated token:', emailVerificationToken);
+    console.log('Token expires:', emailVerificationTokenExpires);
 
     // Hash password
     const salt = bcrypt.genSaltSync(10);
@@ -124,21 +141,22 @@ const createUser = asyncHandler(async (req, res) => {
         email: userDetails.email.trim().toLowerCase(),
         password: hashedPassword,
         age: age,
+        mobile: userDetails.mobile.trim(), // Include mobile
         address: userDetails.address ? userDetails.address.trim() : undefined,
         city: userDetails.city ? userDetails.city.trim() : undefined,
         state: userDetails.state ? userDetails.state.trim() : undefined,
-        zipCode: userDetails.zipCode ? parseInt(userDetails.zipCode) : undefined, // Convert to Number as per schema
-        role: userDetails.role || 'farmer', // Default role as per your schema
+        zipCode: userDetails.zipCode ? parseInt(userDetails.zipCode) : undefined,
+        role: userDetails.role || 'farmer',
         emailVerificationToken: emailVerificationToken,
         emailVerificationTokenExpires: emailVerificationTokenExpires,
         isVerified: false
     };
 
-    console.log('User data before creation:', userData); // Debug log
+    console.log('User data before creation:', userData);
 
     try {
         const user = await User.create(userData);
-        console.log('User created:', user); // Debug log
+        console.log('User created:', user);
 
         if(user){
             // Send verification email
@@ -152,6 +170,7 @@ const createUser = asyncHandler(async (req, res) => {
                         id: user._id,
                         name: user.name,
                         email: user.email,
+                        mobile: user.mobile,
                         age: user.age,
                         address: user.address,
                         city: user.city,
@@ -170,6 +189,7 @@ const createUser = asyncHandler(async (req, res) => {
                         id: user._id,
                         name: user.name,
                         email: user.email,
+                        mobile: user.mobile,
                         age: user.age,
                         address: user.address,
                         city: user.city,
@@ -189,7 +209,13 @@ const createUser = asyncHandler(async (req, res) => {
         
         // Handle specific MongoDB errors
         if (dbError.code === 11000) {
-            res.status(400).json({ message: 'Email already exists' });
+            if (dbError.keyPattern.email) {
+                res.status(400).json({ message: 'Email already exists' });
+            } else if (dbError.keyPattern.mobile) {
+                res.status(400).json({ message: 'Mobile number already exists' });
+            } else {
+                res.status(400).json({ message: 'Duplicate entry detected' });
+            }
         } else if (dbError.name === 'ValidationError') {
             const errors = Object.values(dbError.errors).map(err => err.message);
             res.status(400).json({ message: `Validation Error: ${errors.join(', ')}` });
@@ -249,20 +275,22 @@ const verifyEmail = asyncHandler(async (req, res) => {
 //@access Public
 const resendVerificationEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
-
+ console.log(req.body);
     if(!email) {
         return res.status(400).json({message: 'Email is required'});
     }
 
     const user = await User.findOne({ email });
-
+    
     if(!user) {
         return res.status(404).json({message: 'User not found'});
     }
-
+   
     if(user.isVerified) {
         return res.status(400).json({message: 'Email is already verified'});
     }
+
+     console.log("user found " , user);
 
     // Generate new verification token
     const emailVerificationToken = crypto.randomBytes(32).toString('hex');
