@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Navbar from '../components/Navbar';
 
 const RegistrationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -187,6 +188,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#2a7f62] to-[#1a5c47] flex items-center justify-center p-4">
+      <Navbar/>
       <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full">
         
         {/* Progress Bar */}
