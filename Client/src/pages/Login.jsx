@@ -22,8 +22,8 @@ function Login() {
       ...formData,
       [e.target.name]: e.target.value
     });
-    setError(''); // Clear error when user starts typing
-    setShowResendButton(false); // Hide resend button when user starts typing
+    setError('');
+    setShowResendButton(false); 
   };
 
   const handleResendVerification = async () => {
