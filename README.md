@@ -182,6 +182,4 @@ Modern farmers face significant costs acquiring and maintaining agricultural mac
 
 *AgroTech: Empowering farmers through technology and collaboration!*
 
----
 
-Let me know if you need this in a downloadable format or want to add badges, screenshots, or more details!
