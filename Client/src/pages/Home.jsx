@@ -40,39 +40,87 @@ function Home() {
 
       {/* Enhanced Video Section */}
       <div className='relative' style={{ marginTop: '80px' }}>
-  <video 
-    src="/agrotech.mp4"
-    autoPlay 
-    loop 
-    muted 
-    className='w-full h-[85vh] object-cover'
-  />
-  <div className='absolute inset-0 bg-black/30 flex items-center justify-center'>
-    <div className='text-center text-white'>
-      <h1 className='text-6xl font-bold mb-4 animate-fade-in-up'>
-        Welcome to AgroTech
-      </h1>
-      <p className='text-xl mb-8 animate-fade-in-up animation-delay-300'>
-        Revolutionizing Agriculture Through Smart Equipment Rental
-      </p>
-      <Link to="/register">
-        <button className='bg-gradient-to-r from-[#2a7f62] to-[#41676a] hover:from-[#2f6b57] hover:to-[#4a737a] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in-up animation-delay-500'>
-          Start Your Journey
-        </button>
-      </Link>
-    </div>
-  </div>
-  
-  {/* Developer Credit */}
-  <div className='absolute bottom-4 right-4 text-white/80 animate-fade-in-up animation-delay-700'>
-    <p className='text-sm font-light tracking-wide'>
-      Developed by{' '}
-      <span className='font-semibold text-[#2a7f62] bg-white/20 px-2 py-1 rounded backdrop-blur-sm'>
-        YOHANS BEKELE
-      </span>
-    </p>
-  </div>
-</div>
+        <video 
+          src="/agrotech.mp4"
+          autoPlay 
+          loop 
+          muted 
+          className='w-full h-[85vh] object-cover'
+        />
+        <div className='absolute inset-0 bg-black/30 flex items-center justify-center'>
+          <div className='text-center text-white'>
+            <h1 className='text-6xl font-bold mb-4 animate-fade-in-up'>
+              Welcome to AgroTech
+            </h1>
+            <p className='text-xl mb-8 animate-fade-in-up animation-delay-300'>
+              Revolutionizing Agriculture Through Smart Equipment Rental
+            </p>
+            <Link to="/register">
+              <button className='bg-gradient-to-r from-[#2a7f62] to-[#41676a] hover:from-[#2f6b57] hover:to-[#4a737a] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-in-up animation-delay-500'>
+                Start Your Journey
+              </button>
+            </Link>
+          </div>
+        </div>
+        
+        {/* Test Credentials Chat Box */}
+        <div className='absolute top-4 left-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-6 max-w-sm animate-bounce-in border border-gray-200'>
+          <div className='flex items-center gap-3 mb-4'>
+            <div className='w-10 h-10 bg-gradient-to-br from-[#2a7f62] to-[#41676a] rounded-full flex items-center justify-center'>
+              <span className='text-white text-lg'>🤖</span>
+            </div>
+            <div>
+              <h3 className='font-semibold text-gray-800'>Test Assistant</h3>
+              <div className='flex items-center gap-2'>
+                <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
+                <span className='text-xs text-gray-500'>Online</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className='space-y-3'>
+            <div className='bg-gradient-to-r from-[#2a7f62]/10 to-[#41676a]/10 p-3 rounded-lg border-l-4 border-[#2a7f62]'>
+              <p className='text-sm text-gray-700 mb-2'>
+                <span className='font-medium'>👋 Welcome! Use these test credentials:</span>
+              </p>
+              <div className='space-y-1 text-xs'>
+                <div className='flex items-center gap-2'>
+                  <span className='font-medium text-[#2a7f62]'>📧 Email:</span>
+                  <code className='bg-gray-100 px-2 py-1 rounded text-gray-800'>
+                    noreply.agrotech.verify@gmail.com
+                  </code>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='font-medium text-[#2a7f62]'>🔐 Password:</span>
+                  <code className='bg-gray-100 px-2 py-1 rounded text-gray-800'>
+                    pass123
+                  </code>
+                </div>
+              </div>
+            </div>
+            
+            <div className='flex items-center gap-2 text-xs text-gray-500'>
+              <div className='flex gap-1'>
+                <div className='w-2 h-2 bg-gray-400 rounded-full animate-pulse'></div>
+                <div className='w-2 h-2 bg-gray-400 rounded-full animate-pulse' style={{ animationDelay: '0.2s' }}></div>
+                <div className='w-2 h-2 bg-gray-400 rounded-full animate-pulse' style={{ animationDelay: '0.4s' }}></div>
+              </div>
+              <span>Please don't abuse the infrustracture Thank you !</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Developer Credit */}
+        <div className='absolute bottom-4 right-4 text-white/80 animate-fade-in-up animation-delay-700'>
+          <p className='text-sm font-light tracking-wide'>
+            Developed by{' '}
+            <span className='font-semibold text-[#2a7f62] bg-white/20 px-2 py-1 rounded backdrop-blur-sm'>
+              YOHANS BEKELE
+            </span>
+          </p>
+        </div>
+      </div>
+
       {/* Enhanced Hero Section */}
       <div className='w-full min-h-screen bg-gradient-to-br from-[#f7f7f8] to-[#e8f5e8] flex items-center py-20'>
         <div className='container mx-auto px-8 flex items-center'>
@@ -226,8 +274,29 @@ function Home() {
 
       {/* Footer */}
       <Footer/>
+
+      <style jsx>{`
+        @keyframes bounce-in {
+          0% {
+            transform: translateY(-100px);
+            opacity: 0;
+          }
+          60% {
+            transform: translateY(10px);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-bounce-in {
+          animation: bounce-in 1s ease-out;
+        }
+      `}</style>
     </div>
   )
 }
 
-export default Home
+export default Home;
