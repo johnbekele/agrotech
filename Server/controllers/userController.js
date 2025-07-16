@@ -225,9 +225,6 @@ const createUser = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc Verify email
-//@route GET /api/user/verify-email
-//@access Public
 const verifyEmail = asyncHandler(async (req, res) => {
     const { token } = req.body;
     
@@ -235,15 +232,17 @@ const verifyEmail = asyncHandler(async (req, res) => {
 
     if(!token) {
         console.log('No token provided');
-        return res.status(400).json({message: 'Verification token is required'});
+        return res.status(400).json({
+            success: false, // ✅ Add this
+            message: 'Verification token is required'
+        });
     }
 
     try {
         console.log('Looking for user with token:', token);
         
         const user = await User.findOne({
-            emailVerificationToken
-: token,
+            emailVerificationToken: token,
             emailVerificationTokenExpires: { $gt: Date.now() }
         });
 
@@ -251,7 +250,10 @@ const verifyEmail = asyncHandler(async (req, res) => {
 
         if(!user) {
             console.log('Invalid or expired token');
-            return res.status(400).json({message: 'Invalid or expired verification token'});
+            return res.status(400).json({
+                success: false, // ✅ Add this
+                message: 'Invalid or expired verification token'
+            });
         }
 
         // Update user
@@ -262,11 +264,17 @@ const verifyEmail = asyncHandler(async (req, res) => {
         await user.save();
 
         console.log('User verified successfully');
-        res.status(200).json({message: 'Email verified successfully! You can now log in.'});
+        res.status(200).json({
+            success: true, // ✅ Add this
+            message: 'Email verified successfully! You can now log in.'
+        });
         
     } catch (error) {
         console.error('Database error:', error);
-        res.status(500).json({message: 'Database connection error. Please try again later.'});
+        res.status(500).json({
+            success: false, // ✅ Add this
+            message: 'Database connection error. Please try again later.'
+        });
     }
 });
 
