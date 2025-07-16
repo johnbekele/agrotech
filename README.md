@@ -1,6 +1,6 @@
 # AgroTech — A Platform for Farmers to Share & Rent Tools
 
-**By Yohans Bekele (Album No: 48306)**
+**By Yohans Bekele **
 
 Live Demo: [agrotech-kohl-nine.vercel.app](https://agrotech-kohl-nine.vercel.app)  
 GitHub: [https://github.com/johnbekele/agrotech.git](https://github.com/johnbekele/agrotech.git)
