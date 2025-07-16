@@ -1,7 +1,7 @@
 import React from 'react'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
-import agrotechvid from  "../assets/agrotech.mp4"
+
 function Home() {
   return (
     <div className='w-full min-h-screen bg-gradient-to-br from-[#f7f7f8] to-[#e8f5e8]' style={{ fontFamily: "'Exo 2', sans-serif" }}>
@@ -41,7 +41,7 @@ function Home() {
       {/* Enhanced Video Section */}
       <div className='relative' style={{ marginTop: '80px' }}>
   <video 
-    src={agrotechvid}
+    src="/agrotech.mp4"
     autoPlay 
     loop 
     muted 
