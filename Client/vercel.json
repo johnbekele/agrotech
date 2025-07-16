@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "app/api/**/*.js": {
-      "runtime": "@vercel/node"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -12,7 +7,7 @@
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|mp4|webm|woff|woff2|ttf|eot)$",
       "headers": [
         {
           "key": "Cache-Control",
