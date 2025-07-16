@@ -151,7 +151,7 @@ function Home() {
           <div className='w-1/2 flex justify-center'>
             <div className='animate-fade-in-right'>
               <img 
-                src="../src/assets/hero.png" 
+                src="/hero.png" 
                 alt="Farming Equipment" 
                 className='max-w-full h-auto drop-shadow-2xl transform hover:scale-105 transition-transform duration-500'
               />

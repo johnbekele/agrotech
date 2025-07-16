@@ -157,6 +157,71 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Developer Credit Section - NEW */}
+        <div className="relative mb-8">
+          <div className="flex justify-center">
+            <div className="group cursor-pointer">
+              <div className="relative bg-gradient-to-r from-[#2a7f62]/10 to-[#41676a]/10 backdrop-blur-sm rounded-2xl p-6 border border-[#2a7f62]/20 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105">
+                {/* Animated Background Elements */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2a7f62]/5 to-[#41676a]/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-[#2a7f62] to-[#41676a] rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-r from-[#41676a] to-[#2a7f62] rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                
+                {/* Main Content */}
+                <div className="relative flex items-center justify-center gap-4">
+                  {/* Developer Avatar */}
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#2a7f62] to-[#41676a] rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                      <span className="text-white font-bold text-lg">Y</span>
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-bounce"></div>
+                  </div>
+                  
+                  {/* Developer Info */}
+                  <div className="text-center">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm text-gray-600 font-medium">Crafted with</span>
+                      <span className="text-red-500 animate-pulse text-lg">❤️</span>
+                      <span className="text-sm text-gray-600 font-medium">by</span>
+                    </div>
+                    <div className="relative">
+                      <a href="https://github.com/johnbekele"><h4 className="text-xl font-bold bg-gradient-to-r from-[#2a7f62] to-[#41676a] bg-clip-text text-transparent group-hover:from-[#41676a] group-hover:to-[#2a7f62] transition-all duration-500">
+                        YOHANS BEKELE
+                      </h4></a>
+                      
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#2a7f62] to-[#41676a] group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      Full Stack Developer
+                    </p>
+                  </div>
+                  
+                  {/* Coding Icons */}
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-6 h-6 bg-blue-500 rounded text-white text-xs flex items-center justify-center animate-bounce" style={{ animationDelay: '0.1s' }}>
+                      JS
+                    </div>
+                    <div className="w-6 h-6 bg-cyan-500 rounded text-white text-xs flex items-center justify-center animate-bounce" style={{ animationDelay: '0.2s' }}>
+                      R
+                    </div>
+                    <div className="w-6 h-6 bg-green-500 rounded text-white text-xs flex items-center justify-center animate-bounce" style={{ animationDelay: '0.3s' }}>
+                      N
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Floating Elements */}
+                <div className="absolute top-2 left-2 text-[#2a7f62]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="text-xs animate-pulse">💻</span>
+                </div>
+                <div className="absolute bottom-2 right-2 text-[#41676a]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="text-xs animate-pulse" style={{ animationDelay: '0.5s' }}>🚀</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Section */}
         <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -179,8 +244,35 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Mobile Responsive Adjustments */}
+      {/* Enhanced Animations */}
       <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 5px rgba(42, 127, 98, 0.3); }
+          50% { box-shadow: 0 0 20px rgba(42, 127, 98, 0.6); }
+        }
+        
+        @keyframes typewriter {
+          from { width: 0; }
+          to { width: 100%; }
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+        
+        .animate-typewriter {
+          animation: typewriter 2s steps(40) infinite;
+        }
+        
         @media (max-width: 768px) {
           .grid-cols-1.md\\:grid-cols-4 {
             grid-template-columns: 1fr;
